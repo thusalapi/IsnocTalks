@@ -1,21 +1,16 @@
-import Navbar from '@/components/Navbar'
-import Sidebar from '@/components/Sidebar'
-import React, { ReactNode } from 'react'
 
-const Home = ({children} : {children: ReactNode}) => {
+import React from 'react'
+
+const Home = () => {
   return (
-    <main className='relative'>
-        <Navbar />
-        <div className='flex'>
-            <Sidebar /> 
-            <section className='flex min-h-screen flex-1 flex-col px-6 pb-6 pt-28 max-md:pd-14 sm:px-14'>
-                <div className='w-full'>
-                    {children}
-                </div>
-            </section>
-        </div>
 
-    </main>
+    <section className='flex size-full flex-col gap-10 text-white'>
+      <h1 className='text-3xl font-bold'>
+        Home
+      </h1>
+
+    </section>
+
   )
 }
 
