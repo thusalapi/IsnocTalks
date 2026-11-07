@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import { useStreamVideoClient } from '@stream-io/video-react-sdk';
 import { useRouter } from 'next/navigation';
@@ -35,7 +36,9 @@ const PersonalRoom = () => {
     router.push(`/meeting/${meetingId}?personal=true`);
   };
 
-  const meetingLink = `${getBaseUrl()}/meeting/${meetingId}?personal=true`;
+  const [origin, setOrigin] = useState('');
+  useEffect(() => setOrigin(getBaseUrl()), []);
+  const meetingLink = `${origin}/meeting/${meetingId}?personal=true`;
 
   return (
     <section>
