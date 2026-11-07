@@ -7,7 +7,8 @@ Last updated: 6 November 2026. See [PLAN.md](./PLAN.md) for the full roadmap.
 | Phase | Scope | State |
 | --- | --- | --- |
 | 0 | Video calls, scheduling, recordings (existing app) | Done |
-| 1 | Database foundation and VOD review MVP | Built. Needs a database and a browser test on your machine. |
+| 1 | Database foundation and VOD review MVP | Done |
+| 1.5 | UI revamp (esports theme), landing page, Vercel deploy | Done. Live at https://isnoc-talks.vercel.app |
 | 2 | VOD uploads, student submissions, comment threads | Not started |
 | 3 | Live drawing over screen share, session booking | Not started |
 | 4 | Courses and checkout (Lemon Squeezy) | Not started |
@@ -43,6 +44,15 @@ Last updated: 6 November 2026. See [PLAN.md](./PLAN.md) for the full roadmap.
 4. Run `npm run dev` and open `/vods`.
 5. After any change to `prisma/schema.prisma`, run `npm run db:push`.
 
+## Deployment
+
+- Hosting: Vercel project `isnoc-talks`, production at https://isnoc-talks.vercel.app
+- Node 22 is pinned in `package.json` (`engines`). Node 24 removed `SlowBuffer`, which a Stream SDK dependency still uses.
+- Deploys run from GitHub Actions (`.github/workflows/deploy.yml`): lint and type check, then a preview deploy for pull requests and a production deploy for pushes to `master`.
+- `vercel.json` turns off Vercel's own Git deploys so each commit deploys once.
+- GitHub repository secrets needed: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`.
+- Clerk still uses development keys. Create a Clerk production instance and a custom domain before launch.
+
 ## Known limits
 
 - Saving a note takes a few seconds because the database is in AWS US East. Move to a Singapore Neon project before launch.
@@ -63,6 +73,7 @@ Last updated: 6 November 2026. See [PLAN.md](./PLAN.md) for the full roadmap.
 
 ## Change log
 
+- **2026-11-07**: Revamped the UI (esports dark and neon theme, new logo, landing page at `/`, dashboard at `/dashboard`). Deployed to Vercel. Added the GitHub Actions deploy workflow.
 - **2026-11-07**: Switched the app to node-postgres through the Prisma pg adapter, because broken IPv6 on the dev PC blocked Prisma's engine. Tested the review flow end to end.
 - **2026-11-07**: Connected Neon Postgres, created the tables, made the db scripts read `.env.local`.
 - **2026-11-06**: Added PLAN.md and STATUS.md. Added Prisma and Postgres. Built the VOD review MVP (library, new review form, review room with drawing and timestamped notes, share link).
