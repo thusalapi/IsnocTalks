@@ -3,38 +3,38 @@
 import { useFormState, useFormStatus } from 'react-dom';
 
 import { createVod, type ActionState } from '@/actions/vod.actions';
+import { GAMES } from '@/constants';
 
-const GAMES = ['Valorant', 'CS2', 'League of Legends', 'Dota 2', 'Apex Legends', 'Fortnite', 'Overwatch 2', 'PUBG', 'Rocket League', 'Other'];
 
 function Submit() {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" disabled={pending} className="rounded-lg bg-blue-1 px-5 py-3 font-semibold disabled:opacity-50">
+    <button type="submit" disabled={pending} className="btn-primary px-6 py-3">
       {pending ? 'Creating…' : 'Create review'}
     </button>
   );
 }
 
-const field = 'w-full rounded-lg bg-dark-3 px-3 py-3 text-white outline-none focus:ring-1 focus:ring-blue-1';
+const field = 'input';
 
 export default function NewVodForm() {
   const [state, formAction] = useFormState<ActionState, FormData>(createVod, undefined);
 
   return (
-    <form action={formAction} className="flex max-w-2xl flex-col gap-5">
+    <form action={formAction} className="flex flex-col gap-6">
       <label className="flex flex-col gap-2">
-        <span className="font-semibold">Video link</span>
+        <span className="label">Video link</span>
         <input name="videoUrl" required placeholder="https://www.youtube.com/watch?v=… or https://…/clip.mp4" className={field} />
-        <span className="text-sm text-sky-1">
+        <span className="text-xs text-ink-faint">
           YouTube links (unlisted works) or a direct link to an .mp4 or .webm file. File uploads are coming in Phase 2.
         </span>
       </label>
       <label className="flex flex-col gap-2">
-        <span className="font-semibold">Title</span>
+        <span className="label">Title</span>
         <input name="title" required maxLength={120} placeholder="Ranked match on Ascent, round 7 retake" className={field} />
       </label>
       <label className="flex flex-col gap-2">
-        <span className="font-semibold">Game</span>
+        <span className="label">Game</span>
         <input name="game" list="games" maxLength={60} placeholder="Valorant" className={field} />
         <datalist id="games">
           {GAMES.map((g) => (
@@ -43,7 +43,7 @@ export default function NewVodForm() {
         </datalist>
       </label>
       <label className="flex flex-col gap-2">
-        <span className="font-semibold">Context (optional)</span>
+        <span className="label">Context (optional)</span>
         <textarea
           name="description"
           rows={4}
@@ -52,7 +52,7 @@ export default function NewVodForm() {
           className={field}
         />
       </label>
-      {state?.error && <p className="rounded-lg bg-red-600/20 p-3 text-sm text-red-300">{state.error}</p>}
+      {state?.error && <p className="rounded-xl border border-danger/40 bg-danger/10 p-3 text-sm text-rose-300">{state.error}</p>}
       <div>
         <Submit />
       </div>

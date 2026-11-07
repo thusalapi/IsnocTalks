@@ -1,17 +1,13 @@
-import React from 'react'
-import CallList from '@/components/CallList'
+import CallList from '@/components/CallList';
+import PageHeader from '@/components/layout/PageHeader';
 
-const Upcoming = () => {
+export const metadata = { title: 'Upcoming' };
+
+export default function UpcomingPage() {
   return (
-    <section className='flex size-full flex-col gap-10 text-white'>
-    <h1 className='text-3xl font-bold'>
-      Upcoming
-    </h1>
-
-    <CallList type='upcoming' />
-
-   </section>
-  )
+    <section>
+      <PageHeader eyebrow="Sessions" title="Upcoming" description="Sessions on your calendar. Start them from here or share the invite." />
+      <CallList type="upcoming" />
+    </section>
+  );
 }
-
-export default Upcoming

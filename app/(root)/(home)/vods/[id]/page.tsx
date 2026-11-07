@@ -31,7 +31,7 @@ export default async function VodReviewPage({ params }: { params: { id: string }
       }}
       initialAnnotations={vod.annotations.map(toAnnotation)}
       canEdit={isOwner}
-      baseUrl={process.env.NEXT_PUBLIC_BASE_URL ?? ''}
+      baseUrl=""
     />
   );
 }

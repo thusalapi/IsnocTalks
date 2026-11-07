@@ -1,35 +1,25 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { Button } from './ui/button';
-import { Card, CardContent } from './ui/card';
+import { LogoMark } from '@/components/brand/Logo';
 
-interface PermissionCardProps {
+interface AlertProps {
   title: string;
   iconUrl?: string;
 }
 
-const Alert = ({ title, iconUrl }: PermissionCardProps) => {
+const Alert = ({ title, iconUrl }: AlertProps) => {
   return (
-    <section className="flex-center h-screen w-full">
-      <Card className="w-full max-w-[520px] border-none bg-dark-1 p-6 py-9 text-white">
-        <CardContent>
-          <div className="flex flex-col gap-9">
-            <div className="flex flex-col gap-3.5">
-              {iconUrl && (
-                <div className="flex-center">
-                  <Image src={iconUrl} width={72} height={72} alt="icon" />
-                </div>
-              )}
-              <p className="text-center text-xl font-semibold">{title}</p>
-            </div>
-
-            <Button asChild className="bg-blue-1">
-              <Link href="/">Back to Home</Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+    <section className="flex-center min-h-screen w-full bg-bg bg-grid p-4">
+      <div className="card w-full max-w-[460px] p-8 text-center shadow-glow">
+        <div className="flex-center mb-5">
+          {iconUrl ? <Image src={iconUrl} width={64} height={64} alt="" /> : <LogoMark className="size-14" />}
+        </div>
+        <p className="font-display text-xl font-semibold">{title}</p>
+        <Link href="/dashboard" className="btn-primary mt-6 w-full py-3">
+          Back to dashboard
+        </Link>
+      </div>
     </section>
   );
 };

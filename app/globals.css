@@ -2,111 +2,186 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  html {
+    @apply bg-bg;
+  }
+  body {
+    @apply bg-bg font-sans text-ink antialiased;
+  }
+  ::selection {
+    background: rgba(139, 92, 246, 0.45);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #34345a transparent;
+  }
 }
 
-/* ======== stream css overrides ======== */
+@layer components {
+  .card {
+    @apply rounded-2xl border border-line bg-surface shadow-card;
+  }
+  .card-hover {
+    @apply transition duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:shadow-glow;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition disabled:pointer-events-none disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-primary-600 text-white shadow-glow hover:bg-primary;
+  }
+  .btn-ghost {
+    @apply btn border border-line bg-surface-2 text-ink hover:border-line-strong hover:bg-surface-3;
+  }
+  .btn-icon {
+    @apply inline-flex size-9 items-center justify-center rounded-lg border border-line bg-surface-2 text-ink-soft transition hover:bg-surface-3 hover:text-ink disabled:opacity-40;
+  }
+  .input {
+    @apply w-full rounded-xl border border-line bg-surface-2 px-3.5 py-3 text-sm text-ink outline-none transition placeholder:text-ink-faint focus:border-primary focus:ring-2 focus:ring-primary/30;
+  }
+  .label {
+    @apply text-sm font-semibold text-ink-soft;
+  }
+  .eyebrow {
+    @apply font-display text-xs font-semibold uppercase tracking-[0.2em] text-accent;
+  }
+  .h-display {
+    @apply font-display font-bold tracking-tight;
+  }
+  .text-gradient {
+    @apply bg-text-gradient bg-clip-text text-transparent;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-line bg-surface-2 px-2.5 py-1 text-xs font-medium text-ink-soft;
+  }
+}
+
+@layer utilities {
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+  .flex-between {
+    @apply flex items-center justify-between;
+  }
+  .bg-grid {
+    background-image: linear-gradient(rgba(139, 92, 246, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139, 92, 246, 0.07) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  .bg-radial-fade {
+    background: radial-gradient(60% 50% at 50% 0%, rgba(139, 92, 246, 0.28) 0%, rgba(7, 7, 13, 0) 70%);
+  }
+  .mask-fade-b {
+    mask-image: linear-gradient(to bottom, black 55%, transparent);
+  }
+  .glassmorphism {
+    background: rgba(14, 14, 24, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .glassmorphism2 {
+    background: rgba(7, 7, 13, 0.55);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
+
+/* ======== Stream video overrides ======== */
+.str-video {
+  --str-video__primary-color: #8b5cf6;
+  --str-video__secondary-color: #7c3aed;
+  --str-video__background-color: #07070d;
+  --str-video__base-color1: #0e0e18;
+  --str-video__base-color2: #151524;
+  --str-video__base-color3: #1d1d31;
+}
 .str-video__call-stats {
   max-width: 500px;
   position: relative;
 }
-
 .str-video__speaker-layout__wrapper {
-  max-height: 700px;
+  max-height: 720px;
 }
-
-.str-video__participant-details {
-  color: white;
-}
-
-.str-video__menu-container {
-  color: white;
-}
-
+.str-video__participant-details,
+.str-video__menu-container,
 .str-video__notification {
   color: white;
 }
-
 .str-video__participant-list {
-  background-color: #1c1f2e;
-  padding: 10px;
-  border-radius: 10px;
+  background-color: #0e0e18;
+  border: 1px solid #25253c;
+  padding: 12px;
+  border-radius: 16px;
   color: white;
   height: 100%;
 }
-
 .str-video__call-controls__button {
   height: 40px;
 }
-
-.glassmorphism {
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-.glassmorphism2 {
-  background: rgba(18, 17, 17, 0.25);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+.str-video__video-preview-container {
+  border-radius: 20px;
+  overflow: hidden;
 }
 
-/* ==== clerk class override ===== */
-
-.cl-userButtonPopoverActionButtonIcon {
-  color: white;
-}
-
-.cl-logoBox {
-  height: 40px;
-}
-.cl-dividerLine {
-  background: #252a41;
-  height: 2px;
-}
-
-.cl-socialButtonsIconButton {
-  border: 3px solid #565761;
-}
-
-.cl-internal-wkkub3 {
-  color: white;
-}
+/* ======== Clerk overrides ======== */
+.cl-userButtonPopoverActionButtonIcon,
 .cl-userButtonPopoverActionButton {
   color: white;
 }
-
-/* =============================== */
-
-@layer utilities {
-  .flex-center {
-    @apply flex justify-center items-center;
-  }
-
-  .flex-between {
-    @apply flex justify-between items-center;
-  }
+.cl-dividerLine {
+  background: #25253c;
 }
 
-/* animation */
+/* ======== react-datepicker dark ======== */
+.react-datepicker {
+  background: #151524 !important;
+  border: 1px solid #25253c !important;
+  color: #ececf6 !important;
+  font-family: inherit !important;
+}
+.react-datepicker__header {
+  background: #1d1d31 !important;
+  border-bottom: 1px solid #25253c !important;
+}
+.react-datepicker__current-month,
+.react-datepicker-time__header,
+.react-datepicker__day-name,
+.react-datepicker__day,
+.react-datepicker__time-name {
+  color: #ececf6 !important;
+}
+.react-datepicker__day:hover,
+.react-datepicker__time-list-item:hover {
+  background: #34345a !important;
+}
+.react-datepicker__day--selected,
+.react-datepicker__time-list-item--selected {
+  background: #7c3aed !important;
+}
+.react-datepicker__time-container .react-datepicker__time,
+.react-datepicker__time-list {
+  background: #151524 !important;
+}
+.react-datepicker-wrapper {
+  width: 100%;
+}
 
+/* panel open animation for participants list */
 .show-block {
   width: 100%;
   max-width: 350px;
   display: block;
-  animation: show 0.7s forwards linear;
+  animation: show 0.5s forwards ease-out;
 }
-
 @keyframes show {
   0% {
-    animation-timing-function: ease-in;
     width: 0%;
   }
-
   100% {
-    animation-timing-function: ease-in;
     width: 100%;
   }
 }

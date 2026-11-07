@@ -30,6 +30,7 @@ import { cn } from '@/lib/utils';
 import { formatTime } from '@/lib/vod/source';
 import { DRAW_COLORS, DRAW_SIZES, type Annotation, type Shape, type Tool, type VodSourceType } from '@/lib/vod/types';
 import { useToast } from '@/components/ui/use-toast';
+import { getBaseUrl } from '@/lib/url';
 import DrawingCanvas from './DrawingCanvas';
 import VideoPlayer, { type PlayerHandle } from './VideoPlayer';
 
@@ -299,7 +300,7 @@ export default function ReviewRoom({ vod, initialAnnotations, canEdit, baseUrl }
   });
 
   /* ---------- Sharing ---------- */
-  const shareUrl = `${baseUrl.replace(/\/$/, '')}/review/${vod.shareId}`;
+  const shareUrl = `${(baseUrl || getBaseUrl()).replace(/\/$/, '')}/review/${vod.shareId}`;
   const toggleShare = () => {
     const next = visibility === 'LINK' ? 'PRIVATE' : 'LINK';
     startSaving(async () => {
@@ -325,11 +326,12 @@ export default function ReviewRoom({ vod, initialAnnotations, canEdit, baseUrl }
   const pct = (t: number) => (duration ? `${Math.min(100, (t / duration) * 100)}%` : '0%');
 
   return (
-    <div className="flex w-full flex-col gap-4 text-white">
+    <div className="flex w-full flex-col gap-5 text-ink">
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold sm:text-3xl">{vod.title}</h1>
+          <p className="eyebrow mb-1">VOD review</p>
+          <h1 className="h-display text-2xl sm:text-3xl">{vod.title}</h1>
           <p className="text-sm text-sky-1">
             {vod.game ? `${vod.game} · ` : ''}
             {annotations.length} note{annotations.length === 1 ? '' : 's'}
@@ -342,7 +344,7 @@ export default function ReviewRoom({ vod, initialAnnotations, canEdit, baseUrl }
               disabled={isSaving}
               className={cn(
                 'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold',
-                visibility === 'LINK' ? 'bg-blue-1' : 'bg-dark-3 hover:bg-dark-4'
+                visibility === 'LINK' ? 'bg-primary-600 shadow-glow' : 'border border-line bg-surface-2 hover:bg-surface-3'
               )}
             >
               <Link2 size={16} />
@@ -362,7 +364,7 @@ export default function ReviewRoom({ vod, initialAnnotations, canEdit, baseUrl }
               onBlur={() => setConfirmDelete(false)}
               className={cn(
                 'flex items-center gap-2 rounded-lg px-3 py-2 text-sm',
-                confirmDelete ? 'bg-red-600' : 'bg-dark-3 hover:bg-dark-4'
+                confirmDelete ? 'bg-danger' : 'border border-line bg-surface-2 hover:bg-surface-3'
               )}
             >
               <Trash2 size={16} />
@@ -376,7 +378,7 @@ export default function ReviewRoom({ vod, initialAnnotations, canEdit, baseUrl }
         {/* Player column */}
         <div className="flex min-w-0 flex-col gap-3">
           {canEdit && (
-            <div className="flex flex-wrap items-center gap-2 rounded-xl bg-dark-1 p-2">
+            <div className="flex flex-wrap items-center gap-2 card p-2">
               {TOOLS.map(({ tool: t, label, icon: Icon, key }) => (
                 <button
                   key={t}
@@ -439,7 +441,7 @@ export default function ReviewRoom({ vod, initialAnnotations, canEdit, baseUrl }
             </div>
           )}
 
-          <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-black">
+          <div className="relative aspect-video w-full overflow-hidden rounded-2xl border border-line bg-black shadow-card">
             <VideoPlayer
               ref={player}
               source={vod.source}
@@ -461,7 +463,7 @@ export default function ReviewRoom({ vod, initialAnnotations, canEdit, baseUrl }
               onSurfaceClick={togglePlay}
             />
             {draft && (
-              <div className="pointer-events-none absolute left-3 top-3 rounded-md bg-red-600/90 px-2 py-1 text-xs font-semibold">
+              <div className="pointer-events-none absolute left-3 top-3 rounded-md bg-danger/90 px-2 py-1 text-xs font-semibold">
                 Drawing at {formatTime(draft.timestamp)}
               </div>
             )}
@@ -480,7 +482,7 @@ export default function ReviewRoom({ vod, initialAnnotations, canEdit, baseUrl }
           {/* Timeline */}
           <div
             ref={barRef}
-            className="relative h-3 w-full cursor-pointer rounded-full bg-dark-3"
+            className="relative h-2.5 w-full cursor-pointer rounded-full bg-surface-3"
             onPointerDown={(e) => {
               scrubbing.current = true;
               (e.target as Element).setPointerCapture(e.pointerId);
@@ -489,7 +491,7 @@ export default function ReviewRoom({ vod, initialAnnotations, canEdit, baseUrl }
             onPointerMove={(e) => scrubbing.current && seekFromPointer(e.clientX)}
             onPointerUp={() => (scrubbing.current = false)}
           >
-            <div className="absolute inset-y-0 left-0 rounded-full bg-blue-1" style={{ width: pct(time) }} />
+            <div className="absolute inset-y-0 left-0 rounded-full bg-brand-gradient" style={{ width: pct(time) }} />
             {annotations.map((a) => (
               <button
                 key={a.id}
@@ -497,8 +499,8 @@ export default function ReviewRoom({ vod, initialAnnotations, canEdit, baseUrl }
                 onPointerDown={(e) => e.stopPropagation()}
                 onClick={() => jumpTo(a)}
                 className={cn(
-                  'absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-dark-1',
-                  selectedId === a.id ? 'bg-white' : 'bg-yellow-400'
+                  'absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-bg shadow-glow-cyan',
+                  selectedId === a.id ? 'bg-white' : 'bg-accent'
                 )}
                 style={{ left: pct(a.timestamp) }}
               />
@@ -567,7 +569,7 @@ export default function ReviewRoom({ vod, initialAnnotations, canEdit, baseUrl }
         {/* Side panel */}
         <aside className="flex flex-col gap-3">
           {draft && (
-            <div className="flex flex-col gap-3 rounded-xl border border-blue-1 bg-dark-1 p-4">
+            <div className="card flex flex-col gap-3 border-primary/60 p-4 shadow-glow">
               <div className="flex items-center justify-between">
                 <h2 className="font-semibold">{draft.id ? 'Edit note' : 'New note'}</h2>
                 <button
@@ -584,7 +586,7 @@ export default function ReviewRoom({ vod, initialAnnotations, canEdit, baseUrl }
                 placeholder="What went wrong here, and what should they do instead?"
                 rows={4}
                 maxLength={4000}
-                className="w-full resize-none rounded-lg bg-dark-3 p-2 text-sm outline-none focus:ring-1 focus:ring-blue-1"
+                className="input resize-none"
               />
               <label className="flex items-center justify-between text-sm text-sky-1">
                 Show drawing during playback for
@@ -624,8 +626,8 @@ export default function ReviewRoom({ vod, initialAnnotations, canEdit, baseUrl }
             </div>
           )}
 
-          <div className="flex flex-col rounded-xl bg-dark-1">
-            <h2 className="border-b border-white/10 p-4 font-semibold">Notes</h2>
+          <div className="card flex flex-col overflow-hidden">
+            <h2 className="border-b border-line p-4 font-display font-semibold">Notes</h2>
             {annotations.length === 0 ? (
               <p className="p-4 text-sm text-sky-1">
                 {canEdit
@@ -674,7 +676,7 @@ export default function ReviewRoom({ vod, initialAnnotations, canEdit, baseUrl }
           </div>
 
           {vod.description && (
-            <div className="rounded-xl bg-dark-1 p-4 text-sm text-sky-2">
+            <div className="card p-4 text-sm text-ink-soft">
               <h2 className="mb-1 font-semibold text-white">About this VOD</h2>
               <p className="whitespace-pre-wrap">{vod.description}</p>
             </div>

@@ -1,31 +1,21 @@
-import { Metadata } from 'next';
 import { ReactNode } from 'react';
 
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 
-export const metadata: Metadata = {
-  title: "IsnocTalks",
-  description: "Video calling and coaching app",
-  icons:{
-    icon: '/icons/logo.svg',
-  }
-};
-
-const RootLayout = ({ children }: Readonly<{children: ReactNode}>) => {
+const HomeLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
   return (
-    <main className="relative">
-      <Navbar />
-
-      <div className="flex">
-        <Sidebar />
-        
-        <section className="flex min-h-screen flex-1 flex-col px-6 pb-6 pt-28 max-md:pb-14 sm:px-14">
-          <div className="w-full">{children}</div>
-        </section>
+    <div className="flex min-h-screen bg-bg">
+      <Sidebar />
+      <div className="relative flex min-w-0 flex-1 flex-col">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-radial-fade" />
+        <Navbar />
+        <main className="relative flex-1 px-4 pb-12 pt-6 sm:px-8 lg:pt-8">
+          <div className="mx-auto w-full max-w-[1280px]">{children}</div>
+        </main>
       </div>
-    </main>
+    </div>
   );
 };
 
-export default RootLayout;
+export default HomeLayout;

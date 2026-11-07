@@ -37,7 +37,7 @@ import { ReactNode, useEffect, useState } from 'react';
         setVideoClient(client);
       }, [user, isLoaded]);
 
-      if(!videoClient) return <Loader />;
+      if (!videoClient) return <div className="min-h-screen bg-bg"><Loader /></div>;
 
     return (
       <StreamVideo client={videoClient}>

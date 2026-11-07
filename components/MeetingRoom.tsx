@@ -50,9 +50,9 @@ const MeetingRoom = () => {
   };
 
   return (
-    <section className="relative h-screen w-full overflow-hidden pt-4 text-white">
+    <section className="relative h-screen w-full overflow-hidden bg-bg pt-4 text-white">
       <div className="relative flex size-full items-center justify-center">
-        <div className=" flex size-full max-w-[1000px] items-center">
+        <div className="flex size-full max-w-[1100px] items-center">
           <CallLayout />
         </div>
         <div
@@ -64,16 +64,16 @@ const MeetingRoom = () => {
         </div>
       </div>
       {/* video layout and call controls */}
-      <div className="fixed bottom-0 flex w-full items-center justify-center gap-5">
-        <CallControls onLeave={() => router.push(`/`)} />
+      <div className="fixed bottom-4 left-1/2 flex -translate-x-1/2 flex-wrap items-center justify-center gap-3 rounded-2xl border border-line bg-surface/90 px-4 py-2 backdrop-blur-xl">
+        <CallControls onLeave={() => router.push('/dashboard')} />
 
         <DropdownMenu>
           <div className="flex items-center">
-            <DropdownMenuTrigger className="cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]  ">
+            <DropdownMenuTrigger className="cursor-pointer rounded-xl border border-line bg-surface-2 px-4 py-2 hover:bg-surface-3">
               <LayoutList size={20} className="text-white" />
             </DropdownMenuTrigger>
           </div>
-          <DropdownMenuContent className="border-dark-1 bg-dark-1 text-white">
+          <DropdownMenuContent className="border-line bg-surface text-white">
             {['Grid', 'Speaker-Left', 'Speaker-Right'].map((item, index) => (
               <div key={index}>
                 <DropdownMenuItem
@@ -90,7 +90,7 @@ const MeetingRoom = () => {
         </DropdownMenu>
         <CallStatsButton />
         <button onClick={() => setShowParticipants((prev) => !prev)}>
-          <div className=" cursor-pointer rounded-2xl bg-[#19232d] px-4 py-2 hover:bg-[#4c535b]  ">
+          <div className=" cursor-pointer rounded-xl border border-line bg-surface-2 px-4 py-2 hover:bg-surface-3">
             <Users size={20} className="text-white" />
           </div>
         </button>

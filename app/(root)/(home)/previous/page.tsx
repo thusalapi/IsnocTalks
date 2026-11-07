@@ -1,13 +1,13 @@
-import CallList from "@/components/CallList";
+import CallList from '@/components/CallList';
+import PageHeader from '@/components/layout/PageHeader';
 
-const PreviousPage = () => {
+export const metadata = { title: 'Previous' };
+
+export default function PreviousPage() {
   return (
-    <section className="flex size-full flex-col gap-10 text-white">
-      <h1 className="text-3xl font-bold">Previous Calls</h1>
-
+    <section>
+      <PageHeader eyebrow="Sessions" title="Previous" description="Sessions that have already ended." />
       <CallList type="ended" />
     </section>
   );
-};
-
-export default PreviousPage;
+}
