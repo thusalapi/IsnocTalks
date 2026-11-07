@@ -69,7 +69,7 @@ export default function HeroMock() {
               <ellipse cx="63.5" cy="21.6" rx="5" ry="4" fill="none" stroke="#FBBF24" strokeWidth="0.6" />
               <path d="M20 46 q 10 -6 18 -2" fill="none" stroke="#22D3EE" strokeWidth="0.6" strokeDasharray="1.5 1.2" />
             </svg>
-            <div className="absolute left-[67%] top-[8%] rounded-md bg-black/70 px-2 py-1 font-display text-[10px] font-bold text-warn sm:text-xs">
+            <div className="absolute left-[50%] top-[12%] rounded-md bg-black/70 px-2 py-1 font-display text-[10px] font-bold text-warn sm:text-xs">
               Pre-aim head height
             </div>
             {/* webcams */}
