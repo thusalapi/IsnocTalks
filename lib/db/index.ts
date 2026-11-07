@@ -7,7 +7,12 @@ import { Pool } from 'pg';
 // where IPv6 is broken.
 function createClient() {
   // `pgbouncer=true` is a Prisma-engine-only flag, so drop it for node-postgres.
-  const url = (process.env.DATABASE_URL ?? '').replace(/([?&])pgbouncer=true&?/, '$1').replace(/[?&]$/, '');
+  // Quotes can survive from .env files pasted into hosting dashboards, so trim them too.
+  const url = (process.env.DATABASE_URL ?? '')
+    .trim()
+    .replace(/^['"]|['"]$/g, '')
+    .replace(/([?&])pgbouncer=true&?/, '$1')
+    .replace(/[?&]$/, '');
   const pool = new Pool({ connectionString: url, max: 5 });
   return new PrismaClient({ adapter: new PrismaPg(pool) });
 }
