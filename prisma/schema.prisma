@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  STUDENT
+  COACH
+  ADMIN
+}
+
+enum VodSource {
+  YOUTUBE
+  FILE
+}
+
+enum Visibility {
+  PRIVATE
+  LINK
+}
+
+model User {
+  id          String          @id @default(cuid())
+  clerkId     String          @unique
+  name        String?
+  imageUrl    String?
+  role        Role            @default(STUDENT)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  vods        Vod[]
+  annotations VodAnnotation[]
+}
+
+model Vod {
+  id          String          @id @default(cuid())
+  ownerId     String
+  owner       User            @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  title       String
+  game        String?
+  description String?
+  videoUrl    String
+  source      VodSource
+  shareId     String          @unique
+  visibility  Visibility      @default(PRIVATE)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  annotations VodAnnotation[]
+
+  @@index([ownerId])
+}
+
+model VodAnnotation {
+  id        String   @id @default(cuid())
+  vodId     String
+  vod       Vod      @relation(fields: [vodId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  /// Seconds into the video
+  timestamp Float
+  /// How long the drawing stays visible during playback (seconds)
+  duration  Float    @default(3)
+  note      String   @default("")
+  /// Array of Shape objects (see lib/vod/types.ts), coordinates normalised 0..1
+  shapes    Json     @default("[]")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([vodId, timestamp])
+}
