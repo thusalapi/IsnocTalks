@@ -32,8 +32,8 @@ Last updated: 6 November 2026. See [PLAN.md](./PLAN.md) for the full roadmap.
 - [x] Production build, type check and lint pass
 - [x] Drawing, saving the draft, auto-pause and seeking tested in a headless browser with a test clip
 - [x] Neon Postgres connected (project "IsnocTalks", AWS US East 2) and tables created
-- [ ] Test end to end in your browser (create, annotate, save, share)
-- [ ] Test YouTube playback in a normal browser (the cloud test browser is blocked by YouTube)
+- [x] Tested end to end in Chrome on Windows: create, draw, save, reload, stop at note, share link
+- [x] YouTube playback works in a normal browser
 
 ## Setup steps on your machine
 
@@ -45,6 +45,9 @@ Last updated: 6 November 2026. See [PLAN.md](./PLAN.md) for the full roadmap.
 
 ## Known limits
 
+- Saving a note takes a few seconds because the database is in AWS US East. Move to a Singapore Neon project before launch.
+- `npm run db:push` uses Prisma's own engine, which needs working IPv6 or IPv4-first DNS on this PC. If it times out, run it from another network.
+- YouTube shows its own title bar and pause icon over the video. A later pass can hide them.
 - VODs are links only. File upload arrives in Phase 2.
 - A direct video link must allow playback from other sites. Most cloud storage links work. Some hosts block it.
 - Twitch VODs are not supported yet. The Twitch embed API can be added to the player wrapper later.
@@ -60,5 +63,6 @@ Last updated: 6 November 2026. See [PLAN.md](./PLAN.md) for the full roadmap.
 
 ## Change log
 
+- **2026-11-07**: Switched the app to node-postgres through the Prisma pg adapter, because broken IPv6 on the dev PC blocked Prisma's engine. Tested the review flow end to end.
 - **2026-11-07**: Connected Neon Postgres, created the tables, made the db scripts read `.env.local`.
 - **2026-11-06**: Added PLAN.md and STATUS.md. Added Prisma and Postgres. Built the VOD review MVP (library, new review form, review room with drawing and timestamped notes, share link).
