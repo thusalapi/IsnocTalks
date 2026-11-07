@@ -7,6 +7,8 @@ import { useGetCalls } from '@/hooks/useGetCalls';
 import MeetingCard from './MeetingCard';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { CalendarClock, Clapperboard, History } from 'lucide-react';
+import { getBaseUrl } from '@/lib/url';
 
 const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
   const router = useRouter();
@@ -30,11 +32,11 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
   const getNoCallsMessage = () => {
     switch (type) {
       case 'ended':
-        return 'No Previous Calls';
+        return 'No previous sessions';
       case 'upcoming':
-        return 'No Upcoming Calls';
+        return 'No upcoming sessions';
       case 'recordings':
-        return 'No Recordings';
+        return 'No recordings yet';
       default:
         return '';
     }
@@ -64,22 +66,16 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
   const noCallsMessage = getNoCallsMessage();
 
   return (
-    <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
+    <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
       {calls && calls.length > 0 ? (
         calls.map((meeting: Call | CallRecording) => (
           <MeetingCard
             key={(meeting as Call).id}
-            icon={
-              type === 'ended'
-                ? '/icons/previous.svg'
-                : type === 'upcoming'
-                  ? '/icons/upcoming.svg'
-                  : '/icons/recordings.svg'
-            }
+            icon={type === 'ended' ? History : type === 'upcoming' ? CalendarClock : Clapperboard}
             title={
               (meeting as Call).state?.custom?.description ||
-              (meeting as CallRecording).filename?.substring(0, 20) ||
-              'No Description'
+              (meeting as CallRecording).filename?.substring(0, 28) ||
+              'Coaching session'
             }
             date={
               (meeting as Call).state?.startsAt?.toLocaleString() ||
@@ -89,9 +85,8 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
             link={
               type === 'recordings'
                 ? (meeting as CallRecording).url
-                : `${process.env.NEXT_PUBLIC_BASE_URL}/meeting/${(meeting as Call).id}`
+                : `${getBaseUrl()}/meeting/${(meeting as Call).id}`
             }
-            buttonIcon1={type === 'recordings' ? '/icons/play.svg' : undefined}
             buttonText={type === 'recordings' ? 'Play' : 'Start'}
             handleClick={
               type === 'recordings'
@@ -101,7 +96,10 @@ const CallList = ({ type }: { type: 'ended' | 'upcoming' | 'recordings' }) => {
           />
         ))
       ) : (
-        <h1 className="text-2xl font-bold text-white">{noCallsMessage}</h1>
+        <div className="card col-span-full flex flex-col items-center gap-2 p-12 text-center">
+          <p className="font-display text-xl font-semibold">{noCallsMessage}</p>
+          <p className="text-sm text-ink-muted">Sessions you create or join will show up here.</p>
+        </div>
       )}
     </div>
   );

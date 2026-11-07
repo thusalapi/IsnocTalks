@@ -1,5 +1,6 @@
-import Image from 'next/image';
 import Link from 'next/link';
+
+import Logo from '@/components/brand/Logo';
 import { notFound } from 'next/navigation';
 
 import ReviewRoom from '@/components/vod/ReviewRoom';
@@ -20,14 +21,18 @@ export default async function SharedReviewPage({ params }: { params: { shareId: 
   if (!vod || vod.visibility !== 'LINK') notFound();
 
   return (
-    <main className="min-h-screen bg-dark-2 px-4 py-6 sm:px-10">
-      <div className="mb-6 flex items-center justify-between text-white">
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/icons/logo.svg" width={32} height={32} alt="IsnocTalks" />
-          <span className="text-xl font-extrabold">IsnocTalks</span>
-        </Link>
-        {vod.owner.name && <span className="text-sm text-sky-1">Reviewed by {vod.owner.name}</span>}
-      </div>
+    <main className="relative min-h-screen bg-bg px-4 pb-12 sm:px-10">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-radial-fade" />
+      <header className="relative mb-8 flex h-16 items-center justify-between border-b border-line">
+        <Logo />
+        <div className="flex items-center gap-3">
+          {vod.owner.name && <span className="chip">Reviewed by {vod.owner.name}</span>}
+          <Link href="/sign-up" className="btn-primary hidden py-2 sm:inline-flex">
+            Get coached
+          </Link>
+        </div>
+      </header>
+      <div className="relative mx-auto max-w-[1400px]">
       <ReviewRoom
         vod={{
           id: vod.id,
@@ -43,6 +48,7 @@ export default async function SharedReviewPage({ params }: { params: { shareId: 
         canEdit={false}
         baseUrl=""
       />
+      </div>
     </main>
   );
 }

@@ -1,35 +1,43 @@
 'use client';
 
-import Image from 'next/image';
+import type { LucideIcon } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
+const tones = {
+  violet: 'from-primary/25 text-primary border-primary/30',
+  cyan: 'from-accent/20 text-accent border-accent/30',
+  pink: 'from-pink-500/20 text-pink-400 border-pink-500/30',
+  amber: 'from-amber-400/20 text-amber-300 border-amber-400/30',
+} as const;
+
 interface HomeCardProps {
-  className?: string;
-  img: string;
+  icon: LucideIcon;
   title: string;
   description: string;
+  tone?: keyof typeof tones;
   handleClick?: () => void;
 }
 
-const HomeCard = ({ className, img, title, description, handleClick }: HomeCardProps) => {
+const HomeCard = ({ icon: Icon, title, description, tone = 'violet', handleClick }: HomeCardProps) => {
   return (
-    <section
-      className={cn(
-        'bg-orange-1 px-4 py-6 flex flex-col justify-between w-full xl:max-w-[270px] min-h-[260px] rounded-[14px] cursor-pointer',
-        className
-      )}
+    <button
       onClick={handleClick}
+      className="card card-hover group relative flex min-h-[176px] flex-col justify-between overflow-hidden p-5 text-left"
     >
-      <div className="flex-center glassmorphism size-12 rounded-[10px]">
-        <Image src={img} alt="meeting" width={27} height={27} />
+      <div className={cn('pointer-events-none absolute inset-0 bg-gradient-to-br to-transparent opacity-60', tones[tone].split(' ')[0])} />
+      <div className="relative flex items-start justify-between">
+        <span className={cn('flex-center size-11 rounded-xl border bg-surface-2', tones[tone])}>
+          <Icon size={20} />
+        </span>
+        <ArrowUpRight size={18} className="text-ink-faint transition group-hover:text-ink" />
       </div>
-      
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-bold">{title}</h1>
-        <p className="text-lg font-normal">{description}</p>
+      <div className="relative">
+        <h3 className="font-display text-lg font-semibold">{title}</h3>
+        <p className="mt-1 text-sm text-ink-muted">{description}</p>
       </div>
-    </section>
+    </button>
   );
 };
 

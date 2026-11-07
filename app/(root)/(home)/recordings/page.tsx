@@ -1,13 +1,13 @@
 import CallList from '@/components/CallList';
+import PageHeader from '@/components/layout/PageHeader';
 
-const PreviousPage = () => {
+export const metadata = { title: 'Recordings' };
+
+export default function RecordingsPage() {
   return (
-    <section className="flex size-full flex-col gap-10 text-white">
-      <h1 className="text-3xl font-bold">Recordings</h1>
-
+    <section>
+      <PageHeader eyebrow="Sessions" title="Recordings" description="Recorded coaching sessions you can rewatch or send to students." />
       <CallList type="recordings" />
     </section>
   );
-};
-
-export default PreviousPage;
+}
