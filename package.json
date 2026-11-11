@@ -12,7 +12,7 @@
     "db:studio": "dotenv -e .env.local -- prisma studio"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^4.0.102",
+    "@ai-sdk/google": "^4.0.117",
     "@ai-sdk/react": "^4.0.173",
     "@clerk/nextjs": "^5.0.1",
     "@prisma/adapter-pg": "^5.22.0",

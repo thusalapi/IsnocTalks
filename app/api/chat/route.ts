@@ -1,4 +1,4 @@
-import { anthropic } from '@ai-sdk/anthropic';
+import { google } from '@ai-sdk/google';
 import {
   convertToModelMessages,
   createUIMessageStreamResponse,
@@ -16,7 +16,7 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 const DAILY_LIMIT = Number(process.env.ASSISTANT_DAILY_LIMIT ?? 40);
-const MODEL = process.env.ASSISTANT_MODEL ?? 'claude-haiku-5-5';
+const MODEL = process.env.ASSISTANT_MODEL ?? 'gemini-3.5-flash-lite';
 
 function json(status: number, error: string) {
   return Response.json({ error }, { status });
@@ -25,7 +25,7 @@ function json(status: number, error: string) {
 export async function POST(req: Request) {
   const user = await getDbUser();
   if (!user) return json(401, 'Sign in to use the assistant.');
-  if (!process.env.ANTHROPIC_API_KEY) return json(503, 'The assistant is not set up yet.');
+  if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) return json(503, 'The assistant is not set up yet.');
 
   const body = (await req.json().catch(() => null)) as { messages?: UIMessage[] } | null;
   const messages = body?.messages;
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
   const tools = buildAssistantTools(viewer);
 
   const result = streamText({
-    model: anthropic(MODEL),
+    model: google(MODEL),
     instructions: buildInstructions(viewer),
     // Keep the request small and bounded.
     messages: await convertToModelMessages(messages.slice(-30), { tools }),
