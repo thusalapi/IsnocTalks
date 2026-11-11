@@ -1,0 +1,8 @@
+.env*
+!.env.example
+node_modules
+.next
+.git
+"Claude outputs"
+Claude outputs
+*.bundle
