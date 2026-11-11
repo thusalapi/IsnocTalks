@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
@@ -26,15 +26,23 @@ enum Visibility {
 }
 
 model User {
-  id          String          @id @default(cuid())
-  clerkId     String          @unique
+  id          String           @id @default(cuid())
+  clerkId     String           @unique
   name        String?
   imageUrl    String?
-  role        Role            @default(STUDENT)
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
+  role        Role             @default(STUDENT)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
   vods        Vod[]
   annotations VodAnnotation[]
+  courses     Course[]
+  enrollments Enrollment[]
+  progress    LessonProgress[]
+  ownedSpaces Space[]
+  memberships SpaceMember[]
+  posts       Post[]
+  comments    Comment[]
+  likes       PostLike[]
 }
 
 model Vod {
@@ -72,4 +80,186 @@ model VodAnnotation {
   updatedAt DateTime @updatedAt
 
   @@index([vodId, timestamp])
+}
+
+// ---------------- Courses ----------------
+
+enum CourseLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum LessonType {
+  VIDEO
+  TEXT
+}
+
+enum EnrollmentSource {
+  FREE
+  PURCHASE
+  GRANT
+}
+
+model Course {
+  id             String         @id @default(cuid())
+  slug           String         @unique
+  coachId        String
+  coach          User           @relation(fields: [coachId], references: [id], onDelete: Cascade)
+  title          String
+  subtitle       String?
+  description    String         @default("")
+  game           String?
+  coverUrl       String?
+  level          CourseLevel    @default(BEGINNER)
+  /// Price in cents. 0 means free.
+  priceCents     Int            @default(0)
+  currency       String         @default("USD")
+  /// Lemon Squeezy variant used for checkout when the course is paid
+  lemonVariantId String?
+  published      Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  modules        CourseModule[]
+  enrollments    Enrollment[]
+  spaces         Space[]
+
+  @@index([coachId])
+  @@index([published])
+}
+
+model CourseModule {
+  id       String   @id @default(cuid())
+  courseId String
+  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title    String
+  position Int
+  lessons  Lesson[]
+
+  @@index([courseId, position])
+}
+
+model Lesson {
+  id          String           @id @default(cuid())
+  moduleId    String
+  module      CourseModule     @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  title       String
+  position    Int
+  type        LessonType       @default(VIDEO)
+  videoUrl    String?
+  /// Markdown body shown under the video, or the whole lesson for TEXT lessons
+  content     String           @default("")
+  durationMin Int?
+  /// Free preview lessons can be watched without enrolling
+  isPreview   Boolean          @default(false)
+  progress    LessonProgress[]
+
+  @@index([moduleId, position])
+}
+
+model Enrollment {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId  String
+  course    Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  source    EnrollmentSource @default(FREE)
+  orderId   String?
+  createdAt DateTime         @default(now())
+
+  @@unique([userId, courseId])
+  @@index([courseId])
+}
+
+model LessonProgress {
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId    String
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  completedAt DateTime @default(now())
+
+  @@id([userId, lessonId])
+}
+
+// ---------------- Community ----------------
+
+enum SpaceAccess {
+  OPEN
+  /// Only students enrolled in the linked course can join
+  COURSE
+}
+
+enum SpaceRole {
+  MEMBER
+  MODERATOR
+}
+
+model Space {
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  name        String
+  description String        @default("")
+  game        String?
+  color       String        @default("#8B5CF6")
+  ownerId     String
+  owner       User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  access      SpaceAccess   @default(OPEN)
+  courseId    String?
+  course      Course?       @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  createdAt   DateTime      @default(now())
+  members     SpaceMember[]
+  posts       Post[]
+}
+
+model SpaceMember {
+  spaceId  String
+  space    Space     @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role     SpaceRole @default(MEMBER)
+  joinedAt DateTime  @default(now())
+
+  @@id([spaceId, userId])
+  @@index([userId])
+}
+
+model Post {
+  id        String     @id @default(cuid())
+  spaceId   String
+  space     Space      @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  title     String?
+  body      String
+  /// Optional YouTube or video link shown as a clip
+  clipUrl   String?
+  pinned    Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  comments  Comment[]
+  likes     PostLike[]
+
+  @@index([spaceId, pinned, createdAt])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  body      String
+  createdAt DateTime @default(now())
+
+  @@index([postId, createdAt])
+}
+
+model PostLike {
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([postId, userId])
 }

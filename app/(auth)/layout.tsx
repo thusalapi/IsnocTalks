@@ -6,7 +6,7 @@ import Logo from '@/components/brand/Logo';
 const points = [
   'Live 1:1 coaching with screen share',
   'VOD reviews with on-screen drawing',
-  'Courses and a community (coming soon)',
+  'Courses and a community for every game',
 ];
 
 export default function AuthLayout({ children }: { children: ReactNode }) {

@@ -32,8 +32,8 @@ export const navGroups: { title: string; links: NavLink[] }[] = [
   {
     title: 'Grow',
     links: [
-      { label: 'Courses', route: '/courses', icon: GraduationCap, soon: true },
-      { label: 'Community', route: '/community', icon: MessagesSquare, soon: true },
+      { label: 'Courses', route: '/courses', icon: GraduationCap },
+      { label: 'Community', route: '/community', icon: MessagesSquare },
     ],
   },
 ];
