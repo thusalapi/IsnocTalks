@@ -38,16 +38,14 @@ const features = [
   {
     icon: GraduationCap,
     title: 'Courses',
-    body: 'Structured lessons from coaches you trust, with progress tracking. Learn at your own pace between sessions.',
+    body: 'Video and written lessons from coaches you trust, with progress tracking. Free courses or paid, learn at your own pace.',
     tone: 'text-pink-400 border-pink-500/30 bg-pink-500/10',
-    soon: true,
   },
   {
     icon: MessagesSquare,
     title: 'Community',
-    body: 'Spaces for every game and every coach. Share clips, ask questions and find duo partners.',
+    body: 'Spaces for every game and every coach. Share clips, ask questions, give a GG and get feedback from coaches.',
     tone: 'text-amber-300 border-amber-400/30 bg-amber-400/10',
-    soon: true,
   },
 ];
 
@@ -68,11 +66,11 @@ const faqs = [
   },
   {
     q: 'Can I coach on IsnocTalks?',
-    a: 'Yes. Create an account, start a coaching room and review your students’ VODs. Paid sessions and courses are on the way.',
+    a: 'Yes. Create an account, switch to coach, then run sessions, review VODs, publish courses and open community spaces for your students.',
   },
   {
-    q: 'When do courses and community launch?',
-    a: 'They are next on the roadmap. Sign up now and you will have access as soon as they go live.',
+    q: 'Can communities be members-only?',
+    a: 'Yes. A coach can link a space to a course, so only students enrolled in that course can join and read it.',
   },
 ];
 
@@ -186,13 +184,12 @@ export default function LandingPage() {
           </p>
         </div>
         <div className="mt-14 grid gap-5 md:grid-cols-2">
-          {features.map(({ icon: Icon, title, body, tone, soon }) => (
+          {features.map(({ icon: Icon, title, body, tone }) => (
             <div key={title} className="card card-hover relative overflow-hidden p-7">
               <div className="flex items-center justify-between">
                 <span className={`flex-center size-12 rounded-xl border ${tone}`}>
                   <Icon size={22} />
                 </span>
-                {soon && <span className="chip border-accent/30 text-accent">Coming soon</span>}
               </div>
               <h3 className="h-display mt-6 text-2xl">{title}</h3>
               <p className="mt-2 text-ink-muted">{body}</p>
@@ -236,7 +233,7 @@ export default function LandingPage() {
                 'Reviews drawn on your own gameplay',
                 'Notes that jump to the exact second',
                 'Live sessions with screen share',
-                'Rewatch recordings any time',
+                'Courses and a community of players',
               ].map((t) => (
                 <li key={t} className="flex items-center gap-3">
                   <ScanEye size={16} className="text-accent" /> {t}
@@ -253,7 +250,7 @@ export default function LandingPage() {
                 ['Personal coaching room with one invite link', Radio],
                 ['Schedule sessions and share invites', CalendarCheck],
                 ['Telestration tools for VOD breakdowns', PenTool],
-                ['Share reviews with a private link', Share2],
+                ['Sell courses and run members-only spaces', Share2],
               ].map(([t, I]) => {
                 const Icon = I as typeof Radio;
                 return (
