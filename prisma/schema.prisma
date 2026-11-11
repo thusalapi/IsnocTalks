@@ -43,6 +43,7 @@ model User {
   posts       Post[]
   comments    Comment[]
   likes       PostLike[]
+  assistantUsage AssistantUsage[]
 }
 
 model Vod {
@@ -262,4 +263,17 @@ model PostLike {
   createdAt DateTime @default(now())
 
   @@id([postId, userId])
+}
+
+// ---------------- Assistant ----------------
+
+/// Messages a user sent to the assistant on one day. Used for the daily limit.
+model AssistantUsage {
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// UTC day, YYYY-MM-DD
+  day    String
+  count  Int    @default(0)
+
+  @@id([userId, day])
 }

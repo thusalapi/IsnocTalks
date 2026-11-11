@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 
+import AssistantWidget from '@/components/assistant/AssistantWidget';
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 
@@ -14,6 +15,7 @@ const HomeLayout = ({ children }: Readonly<{ children: ReactNode }>) => {
           <div className="mx-auto w-full max-w-[1280px]">{children}</div>
         </main>
       </div>
+      {process.env.GOOGLE_GENERATIVE_AI_API_KEY ? <AssistantWidget /> : null}
     </div>
   );
 };

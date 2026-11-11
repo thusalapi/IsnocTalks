@@ -73,6 +73,7 @@ Last updated: 6 November 2026. See [PLAN.md](./PLAN.md) for the full roadmap.
 
 ## Change log
 
+- **2026-11-11**: Added the AI assistant (chat panel, `/api/chat`, nine tools, approval before actions, daily limit). It stays hidden until `GOOGLE_GENERATIVE_AI_API_KEY` is set. It uses Gemini Flash-Lite by default.
 - **2026-11-07**: Revamped the UI (esports dark and neon theme, new logo, landing page at `/`, dashboard at `/dashboard`). Deployed to Vercel. Added the GitHub Actions deploy workflow.
 - **2026-11-07**: Switched the app to node-postgres through the Prisma pg adapter, because broken IPv6 on the dev PC blocked Prisma's engine. Tested the review flow end to end.
 - **2026-11-07**: Connected Neon Postgres, created the tables, made the db scripts read `.env.local`.

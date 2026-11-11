@@ -12,6 +12,8 @@
     "db:studio": "dotenv -e .env.local -- prisma studio"
   },
   "dependencies": {
+    "@ai-sdk/google": "^4.0.117",
+    "@ai-sdk/react": "^4.0.173",
     "@clerk/nextjs": "^5.0.1",
     "@prisma/adapter-pg": "^5.22.0",
     "@prisma/client": "^5.22.0",
@@ -22,6 +24,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@stream-io/node-sdk": "^0.1.13",
     "@stream-io/video-react-sdk": "^0.6.7",
+    "ai": "^7.0.169",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "lucide-react": "^0.372.0",
